@@ -1,9 +1,1368 @@
 <!DOCTYPE html>
 <html>
-  <head> </head>
-  <body>
-    <script>
-      window.location.href = "https://webostv.developer.lge.com/";
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AnimeScraping</title>
+  <style>
+        body {
+          background: linear-gradient(135deg, #181a20 0%, #23252b 100%);
+          color: #fff;
+          font-family: 'Segoe UI', Arial, sans-serif;
+          margin: 0;
+          min-height: 100vh;
+        }
+        #anime-app {
+          width: 100vw;
+          height: 100vh;
+          display: flex;
+          flex-direction: row;
+        }
+        #vertical-menu {
+          width: 180px;
+          background: #23252b;
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+          padding-top: 40px;
+          box-shadow: 2px 0 16px rgba(0,0,0,0.18);
+          z-index: 100;
+        }
+        #vertical-menu ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+        }
+        .menu-item {
+          padding: 22px 10px;
+          font-size: 1.15rem;
+          font-weight: 700;
+          cursor: pointer;
+          outline: none;
+          border: none;
+          background: none;
+          color: #b0b0b0;
+          border-radius: 10px;
+          transition: all 0.22s cubic-bezier(.4,0,.2,1);
+          text-transform: uppercase;
+          letter-spacing: 1.2px;
+          margin: 0 10px;
+          text-align: left;
+        }
+        .menu-item.selected, .menu-item:focus {
+          background: #00ffd0;
+          color: #181a20;
+          box-shadow: 0 4px 24px rgba(0,255,208,0.18);
+          transform: scale(1.08);
+        }
+    body {
+      background: linear-gradient(135deg, #181a20 0%, #23252b 100%);
+      #vertical-menu {
+        width: 180px;
+        background: #23252b;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        padding-top: 40px;
+        box-shadow: 2px 0 16px rgba(0,0,0,0.18);
+        z-index: 100;
+      }
+      #vertical-menu ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+      .menu-item {
+        padding: 22px 10px;
+        font-size: 1.15rem;
+        font-weight: 700;
+        cursor: pointer;
+        outline: none;
+        border: none;
+        background: none;
+        color: #b0b0b0;
+        border-radius: 10px;
+        transition: all 0.22s cubic-bezier(.4,0,.2,1);
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        margin: 0 10px;
+        text-align: left;
+      }
+      border: none;
+      background: none;
+      color: #b0b0b0;
+      border-radius: 10px;
+      transition: all 0.22s cubic-bezier(.4,0,.2,1);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin: 0 10px;
+      text-align: left;
+    }
+    .menu-item.selected, .menu-item:focus {
+      background: #00ffd0;
+      color: #181a20;
+      box-shadow: 0 4px 24px rgba(0,255,208,0.18);
+      transform: scale(1.08);
+    }
+    #main-content {
+      flex: 1;
+      overflow-y: auto;
+      height: 100vh;
+      padding: 32px 0 32px 0;
+    }
+    .carousel-container {
+      width: 100%;
+      margin-bottom: 32px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+    .anime-carousel {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 48px;
+      width: 100%;
+      box-sizing: border-box;
+      overflow: visible;
+      margin-left: 60px;
+      margin-right: 60px;
+    }
+    .anime-card {
+      flex: 0 0 260px;
+      width: 260px;
+      margin: 0;
+      background: linear-gradient(135deg, #23252b 60%, #181a20 100%);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 10px 36px rgba(0,0,0,0.48), 0 2px 16px rgba(0,255,208,0.13);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.18s cubic-bezier(.4,0,.2,1), box-shadow 0.18s, border 0.18s;
+      outline: none;
+      position: relative;
+      cursor: pointer;
+      border: 3px solid transparent;
+      max-width: 260px;
+      min-width: 200px;
+    }
+    .anime-card.selected, .anime-card:focus {
+      border: 3px solid #00ffd0;
+      box-shadow: 0 0 0 8px #00ffd033, 0 16px 48px rgba(0,255,208,0.22);
+      transform: scale(1.08);
+      z-index: 2;
+    }
+    .anime-card img {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      border-bottom: 2px solid #00ffd0;
+      background: #111;
+      transition: filter 0.18s;
+      border-radius: 22px 22px 0 0;
+    }
+    .anime-card .title {
+      padding: 20px 10px 22px 10px;
+      font-size: 1.18rem;
+      text-align: center;
+      font-weight: 700;
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      letter-spacing: 0.7px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.25);
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.6);
+      color: #00ffd0;
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 2rem;
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .carousel-arrow:hover { background: #00ffd0; color: #181a20; }
+    .carousel-arrow.left { left: 10px; }
+    .carousel-arrow.right { right: 10px; }
+    @media (max-width: 1800px) {
+      .anime-grid { grid-template-columns: repeat(6, 1fr); }
+    }
+    @media (max-width: 1200px) {
+      .anime-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (max-width: 800px) {
+      .anime-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .anime-card {
+      width: 170px;
+      margin: 0;
+    }
+    .anime-card {
+      background: rgba(35,37,43,0.98);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,255,208,0.06);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.18s cubic-bezier(.4,0,.2,1), box-shadow 0.18s;
+      outline: none;
+      position: relative;
+      cursor: pointer;
+      border: 2px solid transparent;
+      max-width: 170px;
+      min-width: 140px;
+    }
+    .anime-card:hover, .anime-card:focus {
+      transform: scale(1.04);
+      box-shadow: 0 8px 24px rgba(0,255,208,0.13), 0 1.5px 8px rgba(0,0,0,0.3);
+      border: 2px solid #00ffd0;
+      z-index: 2;
+    }
+    .anime-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-bottom: 1px solid #00ffd0;
+      background: #111;
+      transition: filter 0.18s;
+    }
+    .anime-card:hover img, .anime-card:focus img {
+      filter: brightness(1.08) saturate(1.2);
+    }
+    .anime-card .title {
+      padding: 10px 6px 12px 6px;
+      font-size: 1rem;
+      text-align: center;
+      font-weight: 600;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      letter-spacing: 0.3px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.18);
+    }
+    .menu-item.selected, .menu-item:focus {
+      background: #00ffd0;
+      color: #181a20;
+      box-shadow: 0 4px 24px rgba(0,255,208,0.18);
+      transform: scale(1.08);
+    }
+    @media (max-width: 1200px) {
+      .anime-grid { grid-template-columns: repeat(4, 1fr); padding: 30px 10px 120px 10px; }
+    }
+    @media (max-width: 800px) {
+      .anime-grid { grid-template-columns: repeat(2, 1fr); padding: 10px 2vw 100px 2vw; }
+      .anime-card img { height: 180px; }
+    }
+  </style>
+  </style>
+</head>
+<body>
+  <div id="anime-app">
+    <nav id="vertical-menu">
+      <ul>
+        <li tabindex="0" class="menu-item selected" onclick="loadAnimes('ANIME')">ANIMES</li>
+        <li tabindex="0" class="menu-item" onclick="loadAnimes('DORAMA')">DORAMAS</li>
+        <li tabindex="0" class="menu-item" onclick="loadAnimes('PELICULA')">PELICULAS</li>
+        <li tabindex="0" class="menu-item" onclick="loadAnimes('SERIE')">SERIES</li>
+      </ul>
+    </nav>
+    <div id="main-content">
+      <div id="carousels-root"></div>
+    </div>
+  </div>
+  <style>
+    /* Removed sticky menu */
+  </style>
+  <script type="text/javascript">
+    var BACKEND_URL = 'http://192.168.1.147:5000';
+    var currentRow = 0;
+    var currentCol = 0;
+    var totalRows = 0;
+    var cardsPerRow = 8;
+    var animeData = [];
+
+    // Limpieza: eliminar cualquier selección previa
+    function clearSelection() {
+      var prev = document.querySelector('.anime-card.selected');
+      if (prev) prev.classList.remove('selected');
+    }
+
+    // Foco seguro en la tarjeta indicada
+    function focusCard(row, col) {
+      var total = animeData.length;
+      var maxRow = Math.floor((total - 1) / cardsPerRow);
+      if (row < 0) row = 0;
+      if (row > maxRow) row = maxRow;
+      var start = row * cardsPerRow;
+      var end = Math.min((row + 1) * cardsPerRow, total);
+      var maxCol = end - start - 1;
+      var realCol = col;
+      if (col > maxCol) realCol = maxCol;
+      if (realCol < 0) realCol = 0;
+      var selector = '.anime-card[data-row="' + row + '"][data-col="' + realCol + '"]';
+      var cards = document.querySelectorAll('.anime-card');
+      for (var i = 0; i < cards.length; i++) {
+        cards[i].className = cards[i].className.replace('selected', '');
+        cards[i].tabIndex = -1;
+      }
+      var card = document.querySelector(selector);
+      if (card) {
+        card.className += ' selected';
+        card.tabIndex = 0;
+        try { card.focus(); } catch(e) {}
+        var filaId = 'anime-carousel-' + (row+1);
+        var fila = document.getElementById(filaId);
+        if (fila && card) {
+          var left = card.offsetLeft - fila.offsetLeft;
+          if (typeof fila.scrollTo === 'function') {
+            fila.scrollTo(left, 0);
+          } else {
+            fila.scrollLeft = left;
+          }
+        }
+        currentRow = row;
+        currentCol = realCol;
+      }
+    }
+
+    // Navegación por teclado: tarjetas y menú vertical
+    var focusOnMenu = false;
+    var menuIndex = 0;
+    function focusMenu(idx) {
+      var items = document.querySelectorAll('#vertical-menu .menu-item');
+      if (!items || items.length === 0) return;
+      if (idx < 0) idx = 0;
+      if (idx >= items.length) idx = items.length - 1;
+      for (var i = 0; i < items.length; i++) {
+        items[i].className = items[i].className.replace('selected', '');
+      }
+      items[idx].className += ' selected';
+      try { items[idx].focus(); } catch(e) {}
+      focusOnMenu = true;
+      menuIndex = idx;
+    }
+    function blurMenu() {
+      var items = document.querySelectorAll('#vertical-menu .menu-item');
+      for (var i = 0; i < items.length; i++) {
+        items[i].className = items[i].className.replace('selected', '');
+      }
+      focusOnMenu = false;
+    }
+    document.addEventListener('keydown', function(e) {
+      var key = e.keyCode || e.which;
+      var total = animeData.length;
+      var maxRow = Math.floor((total - 1) / cardsPerRow);
+      // 37: left, 38: up, 39: right, 40: down, 13: enter
+      if (focusOnMenu) {
+        var items = document.querySelectorAll('#vertical-menu .menu-item');
+        if (key === 40) { // down
+          menuIndex = (menuIndex + 1) % items.length;
+          focusMenu(menuIndex);
+        } else if (key === 38) { // up
+          menuIndex = (menuIndex - 1 + items.length) % items.length;
+          focusMenu(menuIndex);
+        } else if (key === 39 || key === 13) { // right or enter
+          blurMenu();
+          focusCard(currentRow, 0);
+        } else if (key === 13) {
+          items[menuIndex].click();
+        }
+        if (e.preventDefault) e.preventDefault();
+        return false;
+      }
+      if (key === 39) { // right
+        var nextCol = currentCol + 1;
+        var start = currentRow * cardsPerRow;
+        var end = Math.min((currentRow + 1) * cardsPerRow, total);
+        var maxCol = end - start - 1;
+        if (nextCol > maxCol) return false;
+        focusCard(currentRow, nextCol);
+      } else if (key === 37) { // left
+        var prevCol = currentCol - 1;
+        if (prevCol < 0) {
+          focusMenu(0);
+          return false;
+        }
+        focusCard(currentRow, prevCol);
+      } else if (key === 40) { // down
+        var nextRow = currentRow + 1;
+        if (nextRow > maxRow) return false;
+        focusCard(nextRow, currentCol);
+      } else if (key === 38) { // up
+        var prevRow = currentRow - 1;
+        if (prevRow < 0) return false;
+        focusCard(prevRow, currentCol);
+      } else if (key === 13) { // enter
+        var card = document.querySelector('.anime-card.selected');
+        if (card) {
+          // Simular click para máxima compatibilidad
+          if (typeof card.onclick === 'function') {
+            card.onclick();
+          } else {
+            var evt = document.createEvent('MouseEvents');
+            evt.initEvent('click', true, true);
+            card.dispatchEvent(evt);
+          }
+        }
+      }
+    });
+
+    function loadAnimes(category) {
+      var root = document.getElementById('carousels-root');
+      root.innerHTML = '<div style="width:100%;text-align:center;padding:50px;font-size:1.5rem;">Cargando...</div>';
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', BACKEND_URL + '/api/anime?category=' + encodeURIComponent(category) + '&limit=100', true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            var result = JSON.parse(xhr.responseText);
+            if (result.success && result.data && result.data.length > 0) {
+              animeData = result.data;
+              var html = '';
+              var total = result.data.length;
+              totalRows = Math.ceil(total / cardsPerRow);
+              for (var f = 0; f < totalRows; f++) {
+                var filaId = 'anime-carousel-' + (f+1);
+                html += '<div class="carousel-container">' +
+                  '<div id="' + filaId + '" class="anime-carousel">';
+                for (var i = f*cardsPerRow; i < Math.min((f+1)*cardsPerRow, total); i++) {
+                  var anime = result.data[i];
+                  html += '<div class="anime-card" tabindex="0" data-row="' + f + '" data-col="' + (i-f*cardsPerRow) + '" data-anime-idx="' + i + '">' +
+                    '<img src="' + (anime.image_url || 'https://placehold.co/200x320?text=' + encodeURIComponent(anime.title)) + '" alt="' + anime.title + '">' +
+                    '<div class="title">' + anime.title + '</div>' +
+                    '</div>';
+                }
+                html += '</div>' +
+                  '</div>';
+              }
+              root.innerHTML = html;
+              // Asignar evento click a cada tarjeta para mostrar el detalle
+              setTimeout(function() {
+                var cards = document.querySelectorAll('.anime-card');
+                for (var j = 0; j < cards.length; j++) {
+                  (function(j) {
+                    cards[j].onclick = function() {
+                      if (typeof showAnimeDetail === 'function') {
+                        showAnimeDetail(animeData[j]);
+                      }
+                    };
+                  })(j);
+                }
+                focusCard(0,0);
+              }, 100);
+            } else {
+              root.innerHTML = '<div style="width:100%;text-align:center;padding:50px;">No se encontraron animes</div>';
+            }
+          } else {
+            root.innerHTML = '<div style="width:100%;text-align:center;padding:50px;">Error al cargar contenido</div>';
+          }
+        }
+      };
+      xhr.send();
+    }
+
+    function scrollCarousel(id, direction) {
+      var carousel = document.getElementById(id);
+      var scrollAmount = 10 * 170 + 9 * 18;
+      carousel.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+    }
+
+
+
+    window.onload = function() { loadAnimes('ANIME'); };
+  </script>
+</body>
+</html>
+      // Definir CONFIG directamente aquí para asegurar disponibilidad
+      if (typeof CONFIG === 'undefined') {
+        var CONFIG = {
+          BACKEND_HOST: '192.168.1.147',
+          BACKEND_PORT: 3000,
+          BACKEND_URL: 'http://192.168.1.147:3000'
+        };
+        window.CONFIG = CONFIG;
+      }
+
+      // Forzar log inmediato apenas el panel existe - sin usar console.log
+      (function() {
+        try {
+          var content = document.getElementById('debug-content');
+          if (content) {
+            var timestamp = new Date().toLocaleTimeString();
+            content.innerHTML = '<div style="color: #00ffd0;">[' + timestamp + '] 🚀 App iniciando...</div>';
+            content.innerHTML += '<div style="color: #00ffd0;">[' + timestamp + '] Panel de debug cargado</div>';
+
+            // Usar CONFIG definido arriba
+            content.innerHTML += '<div style="color: #00ffd0;">[' + timestamp + '] Backend: ' + CONFIG.BACKEND_URL + '</div>';
+            content.innerHTML += '<div style="color: #00ffd0;">[' + timestamp + '] JavaScript ejecutándose correctamente</div>';
+          }
+        } catch(e) {
+          var content2 = document.getElementById('debug-content');
+          if (content2) {
+            content2.innerHTML = '<div style="color: #ff5555;">❌ Error crítico inicial: ' + e.message + '</div>';
+          }
+        }
+      })();
+
+      // Ahora intentar con console.log
+      console.log('🚀 App iniciando...');
+      console.log('Panel de debug cargado');
+      console.log('Backend: ' + CONFIG.BACKEND_URL);
+      console.log('Esperando DOMContentLoaded...');
+
+      // Verificar si console.log está funcionando
+      setTimeout(function() {
+        var content = document.getElementById('debug-content');
+        if (content && content.innerHTML.indexOf('Esperando DOMContentLoaded') === -1) {
+          content.innerHTML += '<div style="color: #ff5555; margin-top: 10px;">⚠️ ADVERTENCIA: console.log no funciona. Los logs del sistema no se mostrarán.</div>';
+        }
+      }, 500);
+
+      // Verificar si DOMContentLoaded se dispara
+      setTimeout(function() {
+        var content = document.getElementById('debug-content');
+        if (content && content.innerHTML.indexOf('DOMContentLoaded') === -1) {
+          content.innerHTML += '<div style="color: #ff5555; margin-top: 10px;">⚠️ ERROR: DOMContentLoaded NO se disparó después de 2seg</div>';
+          content.innerHTML += '<div style="color: #ffaa00;">Causa: Error de JavaScript bloqueando</div>';
+
+          // Intentar cargar animes directamente sin esperar DOMContentLoaded
+          content.innerHTML += '<div style="color: #00ffff;">Intentando carga directa...</div>';
+          try {
+            if (typeof loadAnimes === 'function') {
+              loadAnimes('ANIME');
+            } else {
+              content.innerHTML += '<div style="color: #ff5555;">loadAnimes no está definido</div>';
+            }
+          } catch(err) {
+            content.innerHTML += '<div style="color: #ff5555;">Error en carga directa: ' + err.message + '</div>';
+          }
+        }
+      }, 2000);
     </script>
+
+    <div id="anime-app">
+      <main id="anime-list-container">
+        <!-- Aquí se renderizarán los animes -->
+        <div id="anime-grid" class="anime-grid"></div>
+      </main>
+    </div>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #181a20;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        overflow: hidden;
+        width: 1920px;
+        height: 1080px;
+        -webkit-font-smoothing: antialiased;
+        cursor: none; /* Ocultar cursor en TV */
+      }
+
+      #anime-app {
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      .anime-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 20px;
+        padding: 40px 50px 140px 50px;
+        min-height: calc(100vh - 140px);
+        overflow-y: auto;
+      }
+
+      .anime-card {
+        background: #23252b;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        outline: none;
+        position: relative;
+      }
+
+      .anime-card.selected {
+        box-shadow: 0 0 0 6px #00ffd0, 0 8px 24px rgba(0,255,208,0.4);
+        transform: scale(1.1);
+        z-index: 10;
+      }
+
+      .anime-card img {
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+      }
+
+      .anime-card .title {
+        padding: 12px;
+        font-size: 1.1rem;
+        text-align: center;
+        font-weight: 500;
+        line-height: 1.3;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .sticky-menu {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to top, #23252b 0%, #23252b 90%, transparent 100%);
+        box-shadow: 0 -4px 16px rgba(0,0,0,0.5);
+        z-index: 100;
+        padding: 20px 0;
+      }
+
+      .sticky-menu ul {
+        display: flex;
+        justify-content: space-around;
+        margin: 0;
+        padding: 0 50px;
+        list-style: none;
+      }
+
+      .menu-item {
+        padding: 20px 40px;
+        font-size: 1.3rem;
+        font-weight: 600;
+        cursor: pointer;
+        outline: none;
+        border: none;
+        background: none;
+        color: #aaa;
+        border-radius: 12px;
+        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .menu-item.selected, .menu-item:focus {
+        background: #00ffd0;
+        color: #181a20;
+        box-shadow: 0 4px 16px rgba(0,255,208,0.4);
+        transform: scale(1.05);
+      }
+
+      /* Scrollbar para webOS */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #181a20;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #00ffd0;
+        border-radius: 4px;
+      }
+    </style>
+    <script>
+      // Log inmediato para verificar que este script se ejecuta
+      window.addDebugLog('📜 Cargando script principal...');
+
+      // Configuración del backend desde config.js
+      var BACKEND_URL = window.CONFIG ? window.CONFIG.BACKEND_URL : 'http://192.168.1.147:3000';
+      window.addDebugLog('BACKEND_URL: ' + BACKEND_URL);
+
+      var sessionId = localStorage.getItem('sessionId') || generateSessionId();
+
+      function generateSessionId() {
+        var id = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('sessionId', id);
+        return id;
+      }
+
+      window.addDebugLog('sessionId: ' + sessionId);
+
+      // Fetch animes desde el backend real (SIN async/await - usar Promises)
+      function fetchAnimes(category, limit) {
+        category = category || 'ANIME';
+        limit = limit || 100;
+        var url = BACKEND_URL + '/api/anime?category=' + category + '&limit=' + limit;
+        window.addDebugLog('Fetching: ' + url);
+
+        return fetch(url)
+          .then(function(response) {
+            window.addDebugLog('Response status: ' + response.status);
+
+            if (!response.ok) {
+              throw new Error('HTTP error! status: ' + response.status);
+            }
+
+            return response.json();
+          })
+          .then(function(result) {
+            var count = result.data ? result.data.length : 0;
+            window.addDebugLog('Animes recibidos: ' + count);
+
+            if (result.success) {
+              return result.data.map(function(anime) {
+                return {
+                  id: anime.id,
+                  title: anime.title,
+                  image: anime.image_url || 'https://placehold.co/200x120?text=' + encodeURIComponent(anime.title),
+                  description: anime.description || 'Sin descripción disponible',
+                  episodes: anime.episodes || []
+                };
+              });
+            }
+            return [];
+          })
+          .catch(function(error) {
+            window.addDebugLog('ERROR fetching animes: ' + error.message, true);
+            throw error;
+          });
+      }
+
+      // Obtener detalles completos de un anime
+      async function fetchAnimeDetails(animeId) {
+        try {
+          const response = await fetch(`${BACKEND_URL}/api/anime/${animeId}`);
+          const result = await response.json();
+          if (result.success && result.data) {
+            return {
+              id: result.data.id,
+              title: result.data.title,
+              image: result.data.image_url || 'https://placehold.co/400x600?text=' + encodeURIComponent(result.data.title),
+              description: result.data.description || 'Sin descripción disponible',
+              episodes: result.data.episodes || []
+            };
+          }
+          return null;
+        } catch (error) {
+          console.error('Error fetching anime details:', error);
+          return null;
+        }
+      }
+
+      // Gestión de favoritos
+      async function addToFavorites(animeId) {
+        try {
+          const response = await fetch(`${BACKEND_URL}/api/anime/favorite/add`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId, animeId })
+          });
+          const result = await response.json();
+          return result.success;
+        } catch (error) {
+          console.error('Error adding to favorites:', error);
+          return false;
+        }
+      }
+
+      async function removeFromFavorites(animeId) {
+        try {
+          const response = await fetch(`${BACKEND_URL}/api/anime/favorite/remove`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId, animeId })
+          });
+          const result = await response.json();
+          return result.success;
+        } catch (error) {
+          console.error('Error removing from favorites:', error);
+          return false;
+        }
+      }
+
+      async function getFavorites() {
+        try {
+          const response = await fetch(`${BACKEND_URL}/api/anime/favorite/list/${sessionId}`);
+          const result = await response.json();
+          return result.success ? result.data : [];
+        } catch (error) {
+          console.error('Error getting favorites:', error);
+          return [];
+        }
+      }
+
+      async function isFavorite(animeId) {
+        try {
+          const response = await fetch(`${BACKEND_URL}/api/anime/favorite/check/${sessionId}/${animeId}`);
+          const result = await response.json();
+          return result.success && result.isFavorite;
+        } catch (error) {
+          console.error('Error checking favorite:', error);
+          return false;
+        }
+      }
+
+      function renderAnimes(animes) {
+        window.addDebugLog('renderAnimes: ' + animes.length + ' animes');
+        var grid = document.getElementById('anime-grid');
+
+        if (!grid) {
+          window.addDebugLog('ERROR: Grid element not found!', true);
+          return;
+        }
+
+        grid.innerHTML = '';
+        grid.style.display = 'grid';
+        grid.style.visibility = 'visible';
+
+        if (animes.length === 0) {
+          grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 50px;">No se encontraron animes</div>';
+          window.addDebugLog('No animes to display');
+          return;
+        }
+
+        window.addDebugLog('Creating ' + animes.length + ' cards...');
+        animes.forEach(function(anime, idx) {
+          var card = document.createElement('div');
+          card.className = 'anime-card';
+          card.tabIndex = 0;
+          card.dataset.index = idx;
+          card.innerHTML = '<img src="' + anime.image + '" alt="' + anime.title + '"><div class="title">' + anime.title + '</div>';
+          card.addEventListener('click', function() { showAnimeDetail(anime); });
+          grid.appendChild(card);
+        });
+
+        var cardsInDOM = document.querySelectorAll('.anime-card').length;
+        window.addDebugLog('✅ Cards created: ' + cardsInDOM);
+
+        // Seleccionar la primera card después de un pequeño delay
+        setTimeout(() => {
+          selectAnimeCard(0);
+        }, 100);
+      }
+
+      let selectedAnimeIdx = 0;
+      let focusOnMenu = false;
+
+      function selectAnimeCard(idx) {
+        const cards = document.querySelectorAll('.anime-card');
+        cards.forEach(card => card.classList.remove('selected'));
+        if (cards[idx]) {
+          cards[idx].classList.add('selected');
+          cards[idx].focus();
+
+          // Auto-scroll suave para mantener la card visible
+          cards[idx].scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'nearest'
+          });
+        }
+        selectedAnimeIdx = idx;
+      }
+
+      function selectMenuItem(idx) {
+        const items = document.querySelectorAll('.menu-item');
+        items.forEach(item => item.classList.remove('selected'));
+        if (items[idx]) {
+          items[idx].classList.add('selected');
+          items[idx].focus();
+        }
+      }
+
+      let detailMode = false;
+      let selectedEpisodeIdx = 0;
+      let currentAnime = null;
+
+      async function showAnimeDetail(anime) {
+        detailMode = true;
+        selectedEpisodeIdx = 0;
+        const grid = document.getElementById('anime-grid');
+        grid.style.display = 'none';
+        let detail = document.getElementById('anime-detail');
+        if (!detail) {
+          detail = document.createElement('div');
+          detail.id = 'anime-detail';
+          detail.className = 'anime-detail';
+          grid.parentNode.appendChild(detail);
+        }
+
+        // Mostrar loading
+        detail.innerHTML = `
+          <button class="back-btn" tabindex="0">Volver</button>
+          <div class="detail-header">
+            <div style="text-align: center; padding: 50px;">Cargando detalles...</div>
+          </div>
+        `;
+        detail.style.display = 'block';
+        document.querySelector('.back-btn').addEventListener('click', hideAnimeDetail);
+
+        // Obtener detalles completos del anime
+        const fullAnime = await fetchAnimeDetails(anime.id);
+        currentAnime = fullAnime || anime;
+
+        const episodes = currentAnime.episodes || [];
+        const episodesHTML = episodes.length > 0
+          ? episodes.map((ep, idx) => {
+              const episodeTitle = typeof ep === 'string' ? ep : (ep.title || `Episodio ${ep.episode_number || idx + 1}`);
+              const servers = (typeof ep === 'object' && ep.servers) ? ep.servers : [];
+              const serversHTML = servers.length > 0
+                ? servers.map(server =>
+                    `<div class="server-item" tabindex="0" data-url="${server.url}">
+                      <span class="server-name">${server.name}</span>
+                    </div>`
+                  ).join('')
+                : '<div style="padding: 8px; font-size: 0.9rem; color: #888;">No hay servidores disponibles</div>';
+
+              return `
+                <li class="episode-container">
+                  <div class="episode-item" tabindex="0" data-idx="${idx}">
+                    ${episodeTitle}
+                  </div>
+                  <div class="servers-list" style="display: none;">
+                    ${serversHTML}
+                  </div>
+                </li>
+              `;
+            }).join('')
+          : '<li style="padding: 12px;">No hay episodios disponibles</li>';
+
+        detail.innerHTML = `
+          <button class="back-btn" tabindex="0">Volver</button>
+          <div class="detail-header">
+            <img src="${currentAnime.image}" alt="${currentAnime.title}">
+            <div class="detail-info">
+              <h2>${currentAnime.title}</h2>
+              <p>${currentAnime.description}</p>
+              <div class="episodes-list">
+                <h3>Capítulos</h3>
+                <ul id="episodes-list">
+                  ${episodesHTML}
+                </ul>
+              </div>
+            </div>
+          </div>
+        `;
+        document.querySelector('.back-btn').addEventListener('click', hideAnimeDetail);
+
+        // Event listeners para los episodios
+        const episodeItems = document.querySelectorAll('.episode-item');
+        episodeItems.forEach((item, idx) => {
+          item.addEventListener('click', () => toggleServers(idx));
+        });
+
+        // Event listeners para los servidores
+        const serverItems = document.querySelectorAll('.server-item');
+        serverItems.forEach(item => {
+          item.addEventListener('click', () => {
+            const url = item.dataset.url;
+            window.open(url, '_blank');
+          });
+        });
+
+        // No seleccionar ningún capítulo al abrir el detalle
+        selectedEpisodeIdx = -1;
+      }
+
+      function toggleServers(episodeIdx) {
+        const episodeContainers = document.querySelectorAll('.episode-container');
+
+        if (!episodeContainers[episodeIdx]) return;
+
+        const serversList = episodeContainers[episodeIdx].querySelector('.servers-list');
+        const episodeItem = episodeContainers[episodeIdx].querySelector('.episode-item');
+
+        // Cerrar todos los demás episodios
+        episodeContainers.forEach((container, idx) => {
+          if (idx !== episodeIdx) {
+            const otherServers = container.querySelector('.servers-list');
+            const otherEpisode = container.querySelector('.episode-item');
+            if (otherServers) {
+              otherServers.style.display = 'none';
+              otherEpisode.classList.remove('expanded');
+            }
+          }
+        });
+
+        // Toggle del episodio actual
+        if (serversList.style.display === 'none' || serversList.style.display === '') {
+          serversList.style.display = 'block';
+          episodeItem.classList.add('expanded');
+        } else {
+          serversList.style.display = 'none';
+          episodeItem.classList.remove('expanded');
+        }
+      }
+
+      function hideAnimeDetail() {
+        detailMode = false;
+        currentAnime = null;
+        const grid = document.getElementById('anime-grid');
+        grid.style.display = 'grid';
+        const detail = document.getElementById('anime-detail');
+        if (detail) detail.style.display = 'none';
+        selectAnimeCard(selectedAnimeIdx);
+      }
+
+      function selectEpisode(idx) {
+        const items = document.querySelectorAll('.episode-item');
+        // Deselecciona el anterior
+        if (selectedEpisodeIdx !== -1 && items[selectedEpisodeIdx]) {
+          items[selectedEpisodeIdx].classList.remove('selected');
+        }
+        // Selecciona el nuevo
+        if (items[idx]) {
+          items[idx].classList.add('selected');
+          if (document.getElementById('anime-detail')?.style.display === 'block') {
+            items[idx].focus();
+          }
+        }
+        selectedEpisodeIdx = idx;
+      }
+
+      async function handleKeyDown(e) {
+        // Toggle debug panel con tecla 'D'
+        if (e.key === 'd' || e.key === 'D') {
+          const panel = document.getElementById('debug-panel');
+          if (panel) {
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+          }
+          return;
+        }
+
+        // Prevenir comportamiento por defecto SOLO para teclas horizontales y Enter
+        // No prevenir ArrowUp/Down para permitir scroll natural en navegador
+        const navKeys = ['ArrowLeft', 'ArrowRight', 'Enter'];
+        if (navKeys.includes(e.key) || e.keyCode === 13 || e.keyCode === 461) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+
+        // Para ArrowUp/Down, solo prevenir si estamos navegando entre cards
+        if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && (focusOnMenu || detailMode || document.querySelectorAll('.anime-card').length > 0)) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+
+        // webOS 5 control remoto: mapeo de teclas especiales
+        // KeyCode 461 = Back button en webOS
+        // KeyCode 13 = Enter/OK button
+        const isBackButton = e.key === 'Escape' || e.key === 'Backspace' || e.keyCode === 461 || e.key === 'Back';
+        const isEnterButton = e.key === 'Enter' || e.keyCode === 13;
+
+        console.log('Key pressed:', e.key, 'KeyCode:', e.keyCode);
+
+        if (detailMode) {
+          const episodes = document.querySelectorAll('.episode-item');
+          if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            let idx = selectedEpisodeIdx;
+            if (selectedEpisodeIdx === -1) {
+              idx = 0;
+            } else if (e.key === 'ArrowUp') {
+              idx = (selectedEpisodeIdx - 1 + episodes.length) % episodes.length;
+            } else if (e.key === 'ArrowDown') {
+              idx = (selectedEpisodeIdx + 1) % episodes.length;
+            }
+            selectEpisode(idx);
+          } else if (isEnterButton) {
+            if (selectedEpisodeIdx !== -1) {
+              toggleServers(selectedEpisodeIdx);
+            }
+          } else if (isBackButton) {
+            hideAnimeDetail();
+          } else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+            // Ignorar para no salir del detalle
+          }
+          return;
+        }
+        // Navegación principal
+        const cards = document.querySelectorAll('.anime-card');
+        const items = document.querySelectorAll('.menu-item');
+        const cardsPerRow = 7;
+
+        if (focusOnMenu) {
+          let idx = Array.from(items).findIndex(i => i.classList.contains('selected'));
+          if (idx === -1) idx = 0;
+
+          if (e.key === 'ArrowLeft') {
+            idx = (idx - 1 + items.length) % items.length;
+            selectMenuItem(idx);
+          } else if (e.key === 'ArrowRight') {
+            idx = (idx + 1) % items.length;
+            selectMenuItem(idx);
+          } else if (e.key === 'ArrowUp') {
+            focusOnMenu = false;
+            selectAnimeCard(selectedAnimeIdx);
+          } else if (isEnterButton) {
+            // Acción de menú - cargar categoría
+            const categories = ['ANIME', 'DORAMA', 'PELICULA', 'SERIE', 'FAVORITOS'];
+            await loadAnimes(categories[idx]);
+          }
+        } else {
+          if (cards.length === 0) return;
+
+          if (e.key === 'ArrowLeft') {
+            let idx = (selectedAnimeIdx - 1 + cards.length) % cards.length;
+            selectAnimeCard(idx);
+          } else if (e.key === 'ArrowRight') {
+            let idx = (selectedAnimeIdx + 1) % cards.length;
+            selectAnimeCard(idx);
+          } else if (e.key === 'ArrowDown') {
+            let idx = selectedAnimeIdx + cardsPerRow;
+            if (idx >= cards.length) {
+              focusOnMenu = true;
+              selectMenuItem(0);
+            } else {
+              selectAnimeCard(idx);
+            }
+          } else if (e.key === 'ArrowUp') {
+            let idx = selectedAnimeIdx - cardsPerRow;
+            if (idx < 0) idx = 0;
+            selectAnimeCard(idx);
+          } else if (isEnterButton) {
+            const animes = window._animes || [];
+            if (animes[selectedAnimeIdx]) {
+              showAnimeDetail(animes[selectedAnimeIdx]);
+            }
+          }
+        }
+      }
+
+      var currentCategory = 'ANIME';
+
+      function loadAnimes(category) {
+        category = category || 'ANIME';
+        window.addDebugLog('loadAnimes: ' + category);
+        currentCategory = category;
+        var grid = document.getElementById('anime-grid');
+
+        // Mostrar loading
+        grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 50px; font-size: 1.5rem;">Cargando...</div>';
+
+        // Categorías principales: ANIME, DORAMA, PELICULA, SERIE, FAVORITOS
+        var promise;
+        if (category === 'FAVORITOS') {
+          window.addDebugLog('Loading favorites...');
+          promise = getFavorites();
+        } else {
+          window.addDebugLog('Fetching category: ' + category);
+          promise = fetchAnimes(category, 100);
+        }
+
+        return promise
+          .then(function(animes) {
+            window.addDebugLog('Animes fetched: ' + animes.length);
+            window._animes = animes;
+            window.addDebugLog('Calling renderAnimes...');
+            renderAnimes(animes);
+            return animes;
+          })
+          .catch(function(error) {
+            window.addDebugLog('ERROR loading animes: ' + error.message, true);
+            grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 50px;">' +
+              'Error al cargar contenido<br>' +
+              '<small style="color: #888;">' + error.message + '<br>Backend: ' + BACKEND_URL + '</small>' +
+              '</div>';
+            throw error;
+          });
+      }
+
+      window.loadAnimes = loadAnimes;
+
+      // Inicializar la app cuando el DOM esté listo
+      document.addEventListener('DOMContentLoaded', function() {
+        // Log directo al DOM para confirmar que DOMContentLoaded se disparó
+        window.addDebugLog('✅ DOMContentLoaded disparado');
+        window.addDebugLog('Backend URL: ' + (window.CONFIG ? window.CONFIG.BACKEND_URL : 'NO DEFINIDO'));
+        window.addDebugLog('webOS version: ' + (webOSVersion || 'NO DETECTADO'));
+
+        // Registrar manejador de teclado PRIMERO
+        document.addEventListener('keydown', handleKeyDown);
+        window.addDebugLog('Keyboard handler registered');
+
+        window.addDebugLog('📡 Cargando animes desde backend...');
+        loadAnimes('ANIME')
+          .then(function() {
+            window.addDebugLog('✅ Animes cargados exitosamente');
+          })
+          .catch(function(error) {
+            window.addDebugLog('❌ ERROR: ' + error.message, true);
+            var grid = document.getElementById('anime-grid');
+            grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 50px; color: #ff4444;">' +
+              'Error al cargar contenido<br>' +
+              '<small style="color: #888;">' + error.message + '<br>Backend: ' + BACKEND_URL + '</small>' +
+              '</div>';
+          });
+
+        // Event listeners para el menú (solo para click, no para navegación)
+        var menuItems = document.querySelectorAll('.menu-item');
+        window.addDebugLog('Menu items found: ' + menuItems.length);
+
+        var categories = ['ANIME', 'DORAMA', 'PELICULA', 'SERIE', 'FAVORITOS'];
+        menuItems.forEach(function(item, idx) {
+          item.addEventListener('click', function() {
+            window.addDebugLog('Menu item clicked: ' + categories[idx]);
+            loadAnimes(categories[idx]).then(function() {
+              selectMenuItem(idx);
+            });
+          });
+        });
+
+        // Asegurar que body tenga foco para capturar teclas
+        document.body.focus();
+
+        window.addDebugLog('=== App initialization complete ===');
+      });
+    </script>
+    <style>
+      .anime-detail {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #181a20;
+        color: #fff;
+        z-index: 200;
+        padding: 32px 24px 100px 24px;
+        overflow-y: auto;
+        display: none;
+      }
+      .anime-detail .detail-header {
+        display: flex;
+        gap: 32px;
+        align-items: flex-start;
+      }
+      .anime-detail img {
+        width: 260px;
+        height: 420px;
+        object-fit: cover;
+        border-radius: 20px;
+        flex-shrink: 0;
+      }
+      .anime-detail .detail-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .anime-detail h2 {
+        margin: 0 0 8px 0;
+      }
+      .anime-detail p {
+        margin: 0 0 16px 0;
+      }
+      .episodes-list {
+        margin-top: 16px;
+      }
+      .episodes-list ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .episode-container {
+        margin-bottom: 4px;
+        list-style: none;
+      }
+      .episode-item {
+        padding: 12px 16px;
+        background: #23252b;
+        border-radius: 8px;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.2s;
+        position: relative;
+      }
+      .episode-item.selected, .episode-item:focus {
+        background: #00ffd0;
+        color: #181a20;
+      }
+      .episode-item.expanded {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      .servers-list {
+        background: #1a1c22;
+        padding: 12px;
+        border-radius: 0 0 8px 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: -4px;
+      }
+      .server-item {
+        padding: 10px 20px;
+        background: #2a5cff;
+        border-radius: 6px;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .server-item:hover, .server-item:focus {
+        background: #1e47d9;
+        transform: scale(1.05);
+      }
+      .server-name {
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+      .back-btn {
+        position: absolute;
+        top: 32px;
+        right: 40px;
+        padding: 12px 32px;
+        font-size: 1rem;
+        background: #00ffd0;
+        color: #181a20;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        outline: none;
+        z-index: 300;
+        display: block;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      }
+      .anime-detail {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #181a20;
+        color: #fff;
+        z-index: 200;
+        padding: 32px 24px 100px 24px;
+        overflow-y: auto;
+        display: none;
+      }
+    </style>
   </body>
 </html>

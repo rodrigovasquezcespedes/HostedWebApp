@@ -1,0 +1,6 @@
+// Configuración de la WebApp
+var CONFIG = {
+  BACKEND_HOST: '192.168.1.147',
+  BACKEND_PORT: 3000
+};
+CONFIG.BACKEND_URL = 'http://' + CONFIG.BACKEND_HOST + ':' + CONFIG.BACKEND_PORT;
